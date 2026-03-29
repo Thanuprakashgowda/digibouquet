@@ -1,23 +1,23 @@
-# 🌸 DigiBouquet
+#  DigiBouquet
 
 > Create beautiful digital bouquets with personalised messages. Pick realistic flowers, choose an arrangement, apply greenery, select a card style, and share a unique animated link that blooms wherever it lands.
 
 ---
 
-## ✨ Features
+## Features
 
-- **🎂 Occasion Picker**: 8 built-in occasions—birthday, love, sympathy, gratitude, and more.
-- **🌹 Botanical Flower Library**: 22 unique flowers, fully rendered as beautiful SVG illustrations (no more flat emojis!). Features layered rose petals, textured sunflowers, and detailed orchids.
-- **💐 Live Bouquet Preview**: Real-time rendering as you pick flowers. 
-- **📐 Arrangement Controls**: Customize the floristry layout! Choose between *Circle*, *Fan*, *Cascade*, *Bunch*, or *Diamond*.
-- **🌿 Greenery Options**: Add structure to your bouquet with *Soft*, *Lush*, *Minimal*, or *Tropical* botanical leaves.
-- **🎨 Card Styles**: 6 beautiful gradient card backgrounds (Blossom, Meadow, Lavender, Sunset, Ocean, Dawn).
-- **🔗 Shareable Links**: Generates a fast, server-rendered `/b/[id]` link with an animated layout reveal for the recipient.
-- **📚 Flower Library Page**: A full catalogue of available flowers with occasion filters and meanings.
+- ** Occasion Picker**: 8 built-in occasions—birthday, love, sympathy, gratitude, and more.
+- ** Botanical Flower Library**: 22 unique flowers, fully rendered as beautiful SVG illustrations (no more flat emojis!). Features layered rose petals, textured sunflowers, and detailed orchids.
+- ** Live Bouquet Preview**: Real-time rendering as you pick flowers. 
+- ** Arrangement Controls**: Customize the floristry layout! Choose between *Circle*, *Fan*, *Cascade*, *Bunch*, or *Diamond*.
+- ** Greenery Options**: Add structure to your bouquet with *Soft*, *Lush*, *Minimal*, or *Tropical* botanical leaves.
+- ** Card Styles**: 6 beautiful gradient card backgrounds (Blossom, Meadow, Lavender, Sunset, Ocean, Dawn).
+- ** Shareable Links**: Generates a fast, server-rendered `/b/[id]` link with an animated layout reveal for the recipient.
+- ** Flower Library Page**: A full catalogue of available flowers with occasion filters and meanings.
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - **Framework**: Next.js 15 (App Router) + TypeScript
 - **Styling**: Tailwind CSS v4
@@ -26,7 +26,7 @@
 
 ---
 
-## 🚀 Getting Started (Local Development)
+##  Getting Started (Local Development)
 
 You can run this project locally without any cloud credentials—it will automatically use a local JSON file (`data/bouquets.json`) for storage!
 
@@ -43,7 +43,7 @@ Open (https://digibouquet-tau.vercel.app/)
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 digibouquet/
@@ -68,7 +68,7 @@ digibouquet/
 
 ---
 
-## ☁️ Deploy to Vercel (Production)
+##  Deploy to Vercel (Production)
 
 This app is production-ready and optimized for Vercel.
 
