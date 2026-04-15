@@ -35,8 +35,6 @@ export default function BouquetViewerClient({ bouquet }: Props) {
         if (data.views) setViews(data.views);
       })
       .catch(console.error);
-
-    return () => clearTimeout(timer);
   }, [bouquet.id]);
 
   const replayAnimation = () => setAnimationKey((k) => k + 1);
