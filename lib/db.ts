@@ -62,7 +62,7 @@ async function initPostgres() {
 }
 
 export async function createBouquet(
-  input: Omit<Bouquet, 'id' | 'createdAt'> & { customSlug?: string }
+  input: Omit<Bouquet, 'id' | 'createdAt' | 'views'> & { customSlug?: string }
 ): Promise<Bouquet> {
   const { customSlug, ...restInput } = input;
   const id = customSlug || nanoid(8);
