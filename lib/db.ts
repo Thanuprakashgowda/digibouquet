@@ -71,21 +71,23 @@ export async function createBouquet(
 
   if (isPostgres) {
     await initPostgres();
-    await sql`
-      INSERT INTO bouquets (id, occasion, title, flowers, message, recipient, style, arrangement, greenery, views, created_at)
-      VALUES (
-        ${id}, 
-        ${input.occasion}, 
-        ${input.title || null}, 
-        ${JSON.stringify(input.flowers)}, 
-        ${input.message}, 
-        ${input.recipient || null},
-        ${JSON.stringify(input.style)}, 
-        ${input.arrangement || 'circle'}, 
-        ${input.greenery || 'soft'}, 
-        0,
-        ${createdAt}
-      );
+    try {
+      await sql`
+        INSERT INTO bouquets (id, occasion, title, flowers, message, recipient, style, arrangement, greenery, views, created_at)
+        VALUES (
+          ${id}, 
+          ${input.occasion}, 
+          ${input.title || null}, 
+          ${JSON.stringify(input.flowers)}, 
+          ${input.message}, 
+          ${input.recipient || null},
+          ${JSON.stringify(input.style)}, 
+          ${input.arrangement || 'circle'}, 
+          ${input.greenery || 'soft'}, 
+          0,
+          ${createdAt}
+        );
+      `;
     } catch (err: any) {
       if (err.message && (err.message.includes('unique constraint') || err.message.includes('duplicate key'))) {
         throw new Error('Slug is already taken');
