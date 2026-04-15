@@ -1,4 +1,4 @@
-import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 
@@ -10,9 +10,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing occasion or flowers' }, { status: 400 });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GOOGLE_GENERATION_API_KEY) {
       return NextResponse.json(
-        { error: 'AI features require you to configure OPENAI_API_KEY in your env variables.' },
+        { error: 'AI features require you to configure GOOGLE_GENERATION_API_KEY in your env variables.' },
         { status: 500 }
       );
     }
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const flowerNames = flowers.map((f: any) => f.name).join(', ');
 
     const { text } = await generateText({
-      model: openai('gpt-4o-mini'),
+      model: google('gemini-1.5-flash'),
       prompt: `Write 3 different, short, warm, and heartfelt ${occasion} messages for a digital bouquet containing these flowers: ${flowerNames}. Each message should be separated by standard double newlines and no numbering. Keep them under 3 sentences each.`,
     });
 
