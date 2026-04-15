@@ -41,8 +41,10 @@ export interface Bouquet {
   title?: string;
   flowers: SelectedFlower[];
   message: string;
+  recipient?: string;
   style: CardStyle;
   arrangement?: ArrangementId;
   greenery?: GreeneryId;
+  views: number;
   createdAt: string;
 }

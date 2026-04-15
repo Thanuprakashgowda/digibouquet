@@ -5,12 +5,14 @@ import { Occasion, CardStyle, SelectedFlower } from '@/lib/types';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { occasion, title, flowers, message, style } = body as {
+    const { occasion, title, flowers, message, style, customSlug, recipient } = body as {
       occasion: Occasion;
       title?: string;
       flowers: SelectedFlower[];
       message: string;
       style: CardStyle;
+      customSlug?: string;
+      recipient?: string;
     };
 
     if (!occasion || !flowers?.length || !message?.trim() || !style) {
@@ -27,14 +29,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (customSlug && !/^[a-zA-Z0-9-_]+$/.test(customSlug)) {
+      return NextResponse.json(
+        { error: 'Custom URL can only contain letters, numbers, hyphens, and underscores' },
+        { status: 400 }
+      );
+    }
+
     const bouquet = await createBouquet({ 
       occasion, 
       title, 
       flowers, 
       message, 
+      recipient,
       style,
       arrangement: body.arrangement,
       greenery: body.greenery,
+      customSlug: customSlug || undefined,
     });
 
     const host = req.headers.get('host') ?? 'localhost:3000';
@@ -42,7 +53,10 @@ export async function POST(req: NextRequest) {
     const shareUrl = `${protocol}://${host}/b/${bouquet.id}`;
 
     return NextResponse.json({ id: bouquet.id, shareUrl }, { status: 201 });
-  } catch (err) {
+  } catch (err: any) {
+    if (err.message === 'Slug is already taken') {
+      return NextResponse.json({ error: 'That URL is already taken. Try another!' }, { status: 409 });
+    }
     console.error(err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }

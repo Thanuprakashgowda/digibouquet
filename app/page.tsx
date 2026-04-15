@@ -13,6 +13,7 @@ import SelectedFlowerChip from '@/components/SelectedFlowerChip';
 import StepIndicator from '@/components/StepIndicator';
 import Button from '@/components/Button';
 import ArrangementControls from '@/components/ArrangementControls';
+import QRCodeViewer from '@/components/QRCodeViewer';
 
 function nextIndex<T>(arr: T[], current: T): number {
   const i = arr.findIndex((x) => x === current);
@@ -26,12 +27,15 @@ export default function HomePage() {
   const [cardStyle, setCardStyle] = useState<CardStyle | null>(null);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
+  const [recipient, setRecipient] = useState('');
+  const [customSlug, setCustomSlug] = useState('');
 
   // Arrangement + greenery
   const [arrangement, setArrangement] = useState<ArrangementId>('circle');
   const [greenery, setGreenery] = useState<GreeneryId>('soft');
 
   const [loading, setLoading] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,9 +76,11 @@ export default function HomePage() {
           title: title.trim() || undefined,
           flowers: selectedFlowers,
           message: message.trim(),
+          recipient: recipient.trim() || undefined,
           style: cardStyle,
           arrangement,
           greenery,
+          customSlug: customSlug.trim() || undefined,
         }),
       });
       if (!res.ok) {
@@ -88,6 +94,34 @@ export default function HomePage() {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function suggestMessage() {
+    if (!occasion || !selectedFlowers.length) return;
+    setSuggesting(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/suggest-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ occasion, flowers: selectedFlowers }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error ?? 'Failed to generate message');
+      }
+      const data = await res.json();
+      if (data.suggestions && data.suggestions.length > 0) {
+        // Just pick a random one, or cycle. For now just pick the first one 
+        // that's not already the message, or append. Let's just pick random.
+        const randomIndex = Math.floor(Math.random() * data.suggestions.length);
+        setMessage(data.suggestions[randomIndex]);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown AI error');
+    } finally {
+      setSuggesting(false);
     }
   }
 
@@ -133,20 +167,48 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Share URL box */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg">
-          <input
-            readOnly
-            value={shareUrl}
-            className="flex-1 rounded-full border border-stone-300 bg-white px-4 py-2.5 text-sm text-stone-600 shadow-inner focus:outline-none"
-          />
-          <Button onClick={copyUrl} size="md">
-            {copied ? '✓ Copied!' : 'Copy link'}
-          </Button>
+        {/* Share URL box & QR */}
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg items-center sm:items-stretch">
+          <div className="flex-1 flex flex-col gap-3 w-full">
+            <div className="flex gap-3 w-full">
+              <input
+                readOnly
+                value={shareUrl}
+                className="flex-1 rounded-full border border-stone-300 bg-white px-4 py-2.5 text-sm text-stone-600 shadow-inner focus:outline-none"
+              />
+              <Button onClick={copyUrl} size="md">
+                {copied ? '✓ Copied!' : 'Copy link'}
+              </Button>
+            </div>
+            <p className="text-xs text-stone-400 mt-2 px-2">
+              Tip: Visit your share link anytime to see how many times it has been viewed!
+            </p>
+            {/* Flower legend moved here for layout balance optionally, or keep below */}
+            <div className="w-full rounded-2xl border border-stone-100 bg-white p-5 shadow-sm hidden sm:block">
+              <h3 className="text-xs uppercase tracking-widest text-stone-400 mb-3">
+                Flowers in this bouquet
+              </h3>
+              <ul className="space-y-2">
+                {selectedFlowers.map((f) => (
+                  <li key={f.code} className="flex items-start gap-3 text-sm">
+                    <span className="text-2xl">{f.emoji}</span>
+                    <div>
+                      <p className="font-medium text-stone-700">{f.name}</p>
+                      <p className="text-stone-400 text-xs">{f.meaning}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          
+          <div className="shrink-0 flex items-center justify-center">
+            <QRCodeViewer url={shareUrl} />
+          </div>
         </div>
 
-        {/* Flower legend */}
-        <div className="w-full max-w-lg rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
+        {/* Flower legend (mobile only) */}
+        <div className="w-full max-w-lg rounded-2xl border border-stone-100 bg-white p-5 shadow-sm sm:hidden mt-2">
           <h3 className="text-xs uppercase tracking-widest text-stone-400 mb-3">
             Flowers in this bouquet
           </h3>
@@ -163,6 +225,8 @@ export default function HomePage() {
           </ul>
         </div>
 
+
+
         <Button
           variant="outline"
           onClick={() => {
@@ -172,9 +236,11 @@ export default function HomePage() {
             setCardStyle(null);
             setTitle('');
             setMessage('');
+            setRecipient('');
             setShareUrl(null);
             setArrangement('circle');
             setGreenery('soft');
+            setCustomSlug('');
           }}
         >
           Build another bouquet
@@ -328,8 +394,32 @@ export default function HomePage() {
               </div>
               <div>
                 <label className="block text-xs uppercase tracking-widest text-stone-400 mb-1.5">
-                  Message *
+                  Recipient Name (optional)
                 </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Emma"
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                  maxLength={50}
+                  className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-700 placeholder:text-stone-300 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs uppercase tracking-widest text-stone-400">
+                    Message *
+                  </label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={suggestMessage}
+                    disabled={suggesting}
+                    className="text-xs py-1 h-auto"
+                  >
+                    {suggesting ? '✨ Thinking...' : '✨ Suggest Message'}
+                  </Button>
+                </div>
                 <textarea
                   placeholder="Write your heartfelt message here…"
                   value={message}
@@ -339,6 +429,24 @@ export default function HomePage() {
                   className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 focus:outline-none focus:ring-2 focus:ring-rose-300 resize-none"
                 />
                 <p className="text-right text-xs text-stone-300 mt-1">{message.length}/400</p>
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-widest text-stone-400 mb-1.5">
+                  Custom URL (optional)
+                </label>
+                <div className="flex bg-white rounded-xl border border-stone-200 overflow-hidden focus-within:ring-2 focus-within:ring-rose-300">
+                  <span className="bg-stone-50 border-r border-stone-200 px-3 py-2.5 text-sm text-stone-400 select-none flex items-center">
+                    digibouquet.com/b/
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="my-custom-name"
+                    value={customSlug}
+                    onChange={(e) => setCustomSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, ''))}
+                    maxLength={30}
+                    className="flex-1 px-3 py-2.5 text-sm text-stone-700 placeholder:text-stone-300 focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
 
