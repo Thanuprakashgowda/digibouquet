@@ -3,7 +3,7 @@ import Link from 'next/link';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'DigiBouquet – Build & Share Digital Flower Bouquets',
+  title: 'PocketPetals – Build & Share Digital Flower Bouquets',
   description:
     'Create beautiful digital bouquets with personalised messages. Pick flowers, choose a card style, and share your creation with a unique link.',
 };
@@ -30,7 +30,7 @@ export default function RootLayout({
             <Link href="/" className="flex items-center gap-2">
               <span className="text-2xl">🌸</span>
               <span className="font-serif text-lg text-rose-500 font-semibold tracking-tight">
-                DigiBouquet
+                PocketPetals
               </span>
             </Link>
             <div className="flex items-center gap-6 text-sm font-medium text-stone-500">
@@ -53,7 +53,7 @@ export default function RootLayout({
         <main className="mx-auto max-w-5xl px-4 py-10">{children}</main>
 
         <footer className="mt-16 border-t border-stone-200 bg-white py-8 text-center text-xs text-stone-400">
-          <p>🌸 DigiBouquet – share blooms, spread joy</p>
+          <p>🌸 PocketPetals – share blooms, spread joy</p>
           <p className="mt-1">
             Created by{' '}
             <a

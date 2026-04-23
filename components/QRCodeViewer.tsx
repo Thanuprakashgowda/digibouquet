@@ -33,7 +33,7 @@ export default function QRCodeViewer({ url }: Props) {
       const pngFile = canvas.toDataURL('image/png');
       
       const downloadLink = document.createElement('a');
-      downloadLink.download = 'digibouquet-qr.png';
+      downloadLink.download = 'pocketpetals-qr.png';
       downloadLink.href = `${pngFile}`;
       downloadLink.click();
     };

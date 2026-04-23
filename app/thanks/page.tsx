@@ -3,7 +3,7 @@ import Button from '@/components/Button';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Thank you note – DigiBouquet',
+  title: 'Thank you note – PocketPetals',
 };
 
 interface Props {

@@ -10,9 +10,9 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const bouquet = await getBouquet(id);
-  if (!bouquet) return { title: 'Bouquet not found – DigiBouquet' };
+  if (!bouquet) return { title: 'Bouquet not found – PocketPetals' };
   return {
-    title: `${bouquet.title || 'A bouquet for you'} – DigiBouquet`,
+    title: `${bouquet.title || 'A bouquet for you'} – PocketPetals`,
     description: bouquet.message.slice(0, 120),
   };
 }

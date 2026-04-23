@@ -16,7 +16,7 @@ export default async function Image({ params }: { params: { id: string } }) {
     return new ImageResponse(
       (
         <div style={{ fontSize: 64, background: '#fafaf9', color: '#a8a29e', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          Bouquet not found - DigiBouquet
+          Bouquet not found - PocketPetals
         </div>
       ),
       { ...size }
@@ -51,7 +51,7 @@ export default async function Image({ params }: { params: { id: string } }) {
           "{message}"
         </p>
         <p style={{ fontSize: '28px', color: '#a8a29e', marginTop: 'auto', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Sent via DigiBouquet
+          Sent via PocketPetals
         </p>
       </div>
     ),

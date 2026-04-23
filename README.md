@@ -1,4 +1,4 @@
-#  DigiBouquet
+#  PocketPetals
 
 > Create beautiful digital bouquets with personalised messages. Pick realistic flowers, choose an arrangement, apply greenery, select a card style, and share a unique animated link that blooms wherever it lands.
 
@@ -37,7 +37,7 @@ npm install
 npm run dev
 ```
 
-Open (https://digibouquet-tau.vercel.app/) 
+Open (https://pocketpetals-tau.vercel.app/) 
 
 *If you want to test the Postgres database locally, add your `POSTGRES_URL` to a `.env.local` file.*
 
@@ -46,7 +46,7 @@ Open (https://digibouquet-tau.vercel.app/)
 ##  Project Structure
 
 ```
-digibouquet/
+pocketpetals/
 ├── app/
 │   ├── api/bouquets/          # POST + GET API route handlers
 │   ├── b/[id]/                # Bouquet viewer page (animated reveal)
@@ -74,7 +74,7 @@ This app is production-ready and optimized for Vercel.
 
 1. Publish this repository to your GitHub account.
 2. Go to [Vercel](https://vercel.com/new) and click **"Add New Project"**.
-3. Import your `digibouquet` repository and click **Deploy**.
+3. Import your `pocketpetals` repository and click **Deploy**.
 4. Once deployed, click **Continue to Dashboard** and navigate to the **Storage** tab.
 5. Click **Create Database** -> **Postgres** (Powered by Neon). Accept the defaults to connect it to your project.
 6. Go back to your Vercel **Deployments** tab and click **Redeploy** on your latest build.

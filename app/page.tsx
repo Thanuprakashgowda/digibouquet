@@ -454,7 +454,7 @@ export default function HomePage() {
                 </label>
                 <div className="flex bg-white rounded-xl border border-stone-200 overflow-hidden focus-within:ring-2 focus-within:ring-rose-300">
                   <span className="bg-stone-50 border-r border-stone-200 px-3 py-2.5 text-sm text-stone-400 select-none flex items-center">
-                    digibouquet.com/b/
+                    pocketpetals.com/b/
                   </span>
                   <input
                     type="text"
