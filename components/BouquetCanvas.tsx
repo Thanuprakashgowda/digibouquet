@@ -1,6 +1,5 @@
-'use client';
 import React from 'react';
-import { SelectedFlower } from '@/lib/types';
+import { SelectedFlower, WrapperId } from '@/lib/types';
 import { GetFlowerSVG } from './FlowerSVG';
 import { ArrangementId, GreeneryId } from './BouquetPreview';
 
@@ -141,6 +140,7 @@ interface Props {
   flowers: SelectedFlower[];
   arrangement?: ArrangementId;
   greenery?: GreeneryId;
+  wrapper?: WrapperId;
   animate?: boolean;
   width?: number;
 }
@@ -149,6 +149,7 @@ export default function BouquetCanvas({
   flowers,
   arrangement = 'circle',
   greenery = 'soft',
+  wrapper = 'ribbon-pink',
   animate = false,
   width = 280,
 }: Props) {
@@ -187,16 +188,62 @@ export default function BouquetCanvas({
         );
       })}
 
-      {/* ── Ribbon wrap ── */}
-      <path d="M110,268 Q140,258 170,268 Q155,280 140,278 Q125,280 110,268 Z"
-        fill="#f9a8d4" opacity="0.9" />
-      <path d="M106,264 L112,272 M174,264 L168,272"
-        stroke="#ec4899" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="110" y1="268" x2="110" y2="290" stroke="#fbcfe8" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
-      <line x1="170" y1="268" x2="170" y2="290" stroke="#fbcfe8" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
-      {/* Knot */}
-      <ellipse cx="140" cy="268" rx="10" ry="6" fill="#ec4899" />
-      <ellipse cx="140" cy="268" rx="6" ry="4" fill="#f9a8d4" />
+      {/* ── Wrappers / Vases ── */}
+      {(() => {
+        switch (wrapper) {
+          case 'ribbon-blue':
+            return (
+              <g>
+                <path d="M110,268 Q140,258 170,268 Q155,280 140,278 Q125,280 110,268 Z" fill="#93c5fd" opacity="0.9" />
+                <path d="M106,264 L112,272 M174,264 L168,272" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="110" y1="268" x2="110" y2="290" stroke="#bfdbfe" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
+                <line x1="170" y1="268" x2="170" y2="290" stroke="#bfdbfe" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
+                <ellipse cx="140" cy="268" rx="10" ry="6" fill="#3b82f6" />
+                <ellipse cx="140" cy="268" rx="6" ry="4" fill="#93c5fd" />
+              </g>
+            );
+          case 'kraft-paper':
+            return (
+              <g>
+                <path d="M60,190 Q140,230 220,190 L175,290 Q140,310 105,290 Z" fill="#d6d3d1" stroke="#a8a29e" strokeWidth="2" opacity="0.95" />
+                {/* Tie around paper */}
+                <path d="M125,260 Q140,265 155,260" stroke="#78716c" strokeWidth="2" fill="none" />
+                <ellipse cx="140" cy="261" rx="4" ry="2" fill="#78716c" />
+              </g>
+            );
+          case 'glass-vase':
+            return (
+              <g>
+                <path d="M110,240 Q140,265 170,240 L180,300 Q140,310 100,300 Z" fill="#bae6fd" opacity="0.4" stroke="#7dd3fc" strokeWidth="2" />
+                <ellipse cx="140" cy="242" rx="30" ry="8" fill="none" stroke="#7dd3fc" strokeWidth="2" opacity="0.6" />
+                {/* Reflection highlight */}
+                <path d="M115,250 Q118,275 110,295" stroke="#ffffff" strokeWidth="3" fill="none" opacity="0.5" strokeLinecap="round" />
+              </g>
+            );
+          case 'ceramic-vase':
+            return (
+              <g>
+                <path d="M115,240 Q140,235 165,240 C 185,260 190,290 165,305 Q140,312 115,305 C 90,290 95,260 115,240 Z" fill="#fafaf9" stroke="#e7e5e4" strokeWidth="2" />
+                {/* Lip */}
+                <ellipse cx="140" cy="240" rx="25" ry="6" fill="#f5f5f4" stroke="#e7e5e4" strokeWidth="2" />
+                {/* Shadow detail */}
+                <path d="M115,240 C 90,290 95,260 115,305" stroke="#d6d3d1" strokeWidth="8" fill="none" opacity="0.3" />
+              </g>
+            );
+          case 'ribbon-pink':
+          default:
+            return (
+              <g>
+                <path d="M110,268 Q140,258 170,268 Q155,280 140,278 Q125,280 110,268 Z" fill="#f9a8d4" opacity="0.9" />
+                <path d="M106,264 L112,272 M174,264 L168,272" stroke="#ec4899" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="110" y1="268" x2="110" y2="290" stroke="#fbcfe8" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
+                <line x1="170" y1="268" x2="170" y2="290" stroke="#fbcfe8" strokeWidth="8" strokeLinecap="round" opacity="0.8"/>
+                <ellipse cx="140" cy="268" rx="10" ry="6" fill="#ec4899" />
+                <ellipse cx="140" cy="268" rx="6" ry="4" fill="#f9a8d4" />
+              </g>
+            );
+        }
+      })()}
 
       {/* ── Flowers (sorted back-to-front) ── */}
       {sorted.map(({ slot, flower }, i) => {
@@ -215,7 +262,9 @@ export default function BouquetCanvas({
               height={flowerSize}
             >
               <div style={{ width: flowerSize, height: flowerSize }}>
-                <GetFlowerSVG code={flower.code} scale={slot.scale} />
+                <div className={animate ? "animate-sway" : ""} style={{ animationDelay: `${i * 0.4}s` }}>
+                  <GetFlowerSVG code={flower.code} scale={slot.scale} />
+                </div>
               </div>
             </foreignObject>
           </g>

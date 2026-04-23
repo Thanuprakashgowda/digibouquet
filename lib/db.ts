@@ -53,6 +53,7 @@ async function initPostgres() {
     try {
       await sql`ALTER TABLE bouquets ADD COLUMN IF NOT EXISTS views INT DEFAULT 0;`;
       await sql`ALTER TABLE bouquets ADD COLUMN IF NOT EXISTS recipient TEXT;`;
+      await sql`ALTER TABLE bouquets ADD COLUMN IF NOT EXISTS wrapper TEXT;`;
     } catch (e) {
       // Ignored if column already exists or command fails
     }
@@ -73,7 +74,7 @@ export async function createBouquet(
     await initPostgres();
     try {
       await sql`
-        INSERT INTO bouquets (id, occasion, title, flowers, message, recipient, style, arrangement, greenery, views, created_at)
+        INSERT INTO bouquets (id, occasion, title, flowers, message, recipient, style, arrangement, greenery, wrapper, views, created_at)
         VALUES (
           ${id}, 
           ${input.occasion}, 
@@ -84,6 +85,7 @@ export async function createBouquet(
           ${JSON.stringify(input.style)}, 
           ${input.arrangement || 'circle'}, 
           ${input.greenery || 'soft'}, 
+          ${input.wrapper || 'ribbon-pink'},
           0,
           ${createdAt}
         );
@@ -127,6 +129,7 @@ export async function getBouquet(id: string): Promise<Bouquet | null> {
         style: r.style,
         arrangement: r.arrangement,
         greenery: r.greenery,
+        wrapper: r.wrapper,
         views: r.views ?? 0,
         createdAt: r.created_at,
       };

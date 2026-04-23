@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
       style,
       arrangement: body.arrangement,
       greenery: body.greenery,
+      wrapper: body.wrapper,
       customSlug: customSlug || undefined,
     });
 

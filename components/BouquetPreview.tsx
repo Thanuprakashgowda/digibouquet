@@ -1,5 +1,5 @@
 'use client';
-import { SelectedFlower } from '@/lib/types';
+import { SelectedFlower, WrapperId } from '@/lib/types';
 import BouquetCanvas from './BouquetCanvas';
 
 // ── Arrangement / Greenery types & data ───────────────────────────────────
@@ -27,6 +27,7 @@ interface Props {
   flowers: SelectedFlower[];
   arrangement?: ArrangementId;
   greenery?: GreeneryId;
+  wrapper?: WrapperId;
   animate?: boolean;
   size?: number;
 }
@@ -35,6 +36,7 @@ export default function BouquetPreview({
   flowers,
   arrangement = 'circle',
   greenery = 'soft',
+  wrapper = 'ribbon-pink',
   animate = false,
   size = 220,
 }: Props) {
@@ -54,6 +56,7 @@ export default function BouquetPreview({
       flowers={flowers}
       arrangement={arrangement}
       greenery={greenery}
+      wrapper={wrapper}
       animate={animate}
       width={size}
     />

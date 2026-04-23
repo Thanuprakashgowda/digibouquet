@@ -53,3 +53,68 @@
 .delay-300 { animation-delay: 0.3s; }
 .delay-500 { animation-delay: 0.5s; }
 .delay-700 { animation-delay: 0.7s; }
+
+/* Envelope flip animations */
+@keyframes envelopeOpen {
+  from { transform: rotateX(0deg); z-index: 10; }
+  to   { transform: rotateX(180deg); z-index: 0; }
+}
+.envelope-open {
+  transform-origin: top;
+  animation: envelopeOpen 0.6s ease-in-out forwards;
+}
+
+@keyframes envelopeFadeOut {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
+  100% { opacity: 0; transform: scale(1.1) translateY(20px); visibility: hidden; }
+}
+.envelope-fade-out {
+  animation: envelopeFadeOut 0.5s ease-in forwards;
+}
+
+/* Ambient gentle sway for flowers */
+@keyframes flowerSway {
+  0%   { transform: rotate(-3deg); }
+  50%  { transform: rotate(3deg); }
+  100% { transform: rotate(-3deg); }
+}
+
+.animate-sway {
+  animation: flowerSway 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* 3D Flip Card classes */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.flip-card-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.flip-front, .flip-back {
+  grid-row: 1;
+  grid-column: 1;
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}

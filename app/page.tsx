@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Occasion, CardStyle, SelectedFlower } from '@/lib/types';
+import { Occasion, CardStyle, SelectedFlower, WrapperId } from '@/lib/types';
 import { FLOWERS, getFlowersByOccasion } from '@/lib/flowers';
 import { CARD_STYLES } from '@/lib/styles';
 import OccasionPicker from '@/components/OccasionPicker';
@@ -13,6 +13,7 @@ import SelectedFlowerChip from '@/components/SelectedFlowerChip';
 import StepIndicator from '@/components/StepIndicator';
 import Button from '@/components/Button';
 import ArrangementControls from '@/components/ArrangementControls';
+import WrapperControls, { WRAPPERS } from '@/components/WrapperControls';
 import QRCodeViewer from '@/components/QRCodeViewer';
 
 function nextIndex<T>(arr: T[], current: T): number {
@@ -30,9 +31,10 @@ export default function HomePage() {
   const [recipient, setRecipient] = useState('');
   const [customSlug, setCustomSlug] = useState('');
 
-  // Arrangement + greenery
+  // Arrangement + greenery + wrapper
   const [arrangement, setArrangement] = useState<ArrangementId>('circle');
   const [greenery, setGreenery] = useState<GreeneryId>('soft');
+  const [wrapper, setWrapper] = useState<WrapperId>('ribbon-pink');
 
   const [loading, setLoading] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
@@ -63,6 +65,12 @@ export default function HomePage() {
     setGreenery(next);
   }
 
+  function handleNextWrapper() {
+    const ids = WRAPPERS.map((w) => w.id);
+    const next = ids[nextIndex(ids, wrapper)];
+    setWrapper(next);
+  }
+
   async function handleSubmit() {
     if (!occasion || !selectedFlowers.length || !message.trim() || !cardStyle) return;
     setLoading(true);
@@ -80,6 +88,7 @@ export default function HomePage() {
           style: cardStyle,
           arrangement,
           greenery,
+          wrapper,
           customSlug: customSlug.trim() || undefined,
         }),
       });
@@ -149,15 +158,19 @@ export default function HomePage() {
               flowers={selectedFlowers}
               arrangement={arrangement}
               greenery={greenery}
+              wrapper={wrapper}
               animate
             />
             {/* Arrangement controls on share screen too */}
-            <ArrangementControls
-              arrangement={arrangement}
-              greenery={greenery}
-              onNextArrangement={handleNextArrangement}
-              onNextGreenery={handleNextGreenery}
-            />
+            <div className="flex flex-col gap-2 relative z-20">
+              <ArrangementControls
+                arrangement={arrangement}
+                greenery={greenery}
+                onNextArrangement={handleNextArrangement}
+                onNextGreenery={handleNextGreenery}
+              />
+              <WrapperControls wrapper={wrapper} onNextWrapper={handleNextWrapper} />
+            </div>
           </div>
           <CardPreview
             style={cardStyle!}
@@ -240,6 +253,7 @@ export default function HomePage() {
             setShareUrl(null);
             setArrangement('circle');
             setGreenery('soft');
+            setWrapper('ribbon-pink');
             setCustomSlug('');
           }}
         >
@@ -335,13 +349,17 @@ export default function HomePage() {
                 flowers={selectedFlowers}
                 arrangement={arrangement}
                 greenery={greenery}
+                wrapper={wrapper}
               />
-              <ArrangementControls
-                arrangement={arrangement}
-                greenery={greenery}
-                onNextArrangement={handleNextArrangement}
-                onNextGreenery={handleNextGreenery}
-              />
+              <div className="flex flex-col gap-2">
+                <ArrangementControls
+                  arrangement={arrangement}
+                  greenery={greenery}
+                  onNextArrangement={handleNextArrangement}
+                  onNextGreenery={handleNextGreenery}
+                />
+                <WrapperControls wrapper={wrapper} onNextWrapper={handleNextWrapper} />
+              </div>
             </div>
           )}
 
@@ -456,13 +474,17 @@ export default function HomePage() {
                 flowers={selectedFlowers}
                 arrangement={arrangement}
                 greenery={greenery}
+                wrapper={wrapper}
               />
-              <ArrangementControls
-                arrangement={arrangement}
-                greenery={greenery}
-                onNextArrangement={handleNextArrangement}
-                onNextGreenery={handleNextGreenery}
-              />
+              <div className="flex flex-col gap-2">
+                <ArrangementControls
+                  arrangement={arrangement}
+                  greenery={greenery}
+                  onNextArrangement={handleNextArrangement}
+                  onNextGreenery={handleNextGreenery}
+                />
+                <WrapperControls wrapper={wrapper} onNextWrapper={handleNextWrapper} />
+              </div>
               <CardPreview
                 style={cardStyle!}
                 title={title}

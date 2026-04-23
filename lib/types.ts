@@ -35,6 +35,8 @@ export type CardStyle = {
   accent: string;      // tailwind text colour
 };
 
+export type WrapperId = 'ribbon-pink' | 'ribbon-blue' | 'kraft-paper' | 'glass-vase' | 'ceramic-vase';
+
 export interface Bouquet {
   id: string;
   occasion: Occasion;
@@ -45,6 +47,7 @@ export interface Bouquet {
   style: CardStyle;
   arrangement?: ArrangementId;
   greenery?: GreeneryId;
+  wrapper?: WrapperId;
   views: number;
   createdAt: string;
 }
